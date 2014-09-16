@@ -12,14 +12,14 @@ class ControllerModuleChangeCollationType extends Controller {
 		$this->load->language('module/change_collation_type');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-		
-		$this->load->model('setting/setting');
+
+		$this->load->model('tool/collation');
 		
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			foreach ($this->request->post as $key => $value) {
 				$this->request->post[$key] = serialize($value);
 			}
-					
+			$this->model_tool_collation->changeType($this->request->post);
 			$this->session->data['success'] = $this->language->get('text_success');
 						
 			$this->redirect($this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL'));
