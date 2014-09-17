@@ -8,7 +8,23 @@ This file is auto generated from a template file
 class ControllerModuleChangeCollationType extends Controller {
 	
 	private $error = array(); 
-	public function index() {
+	
+	public function process() {
+		//if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+		//	foreach ($this->request->post as $key => $value) {
+			//	$this->request->post[$key] = serialize($value);
+		//	}
+		//	$this->model_tool_collation->changeType($this->request->post);
+		$vars['new_charset']='utf8';
+		$vars['new_collation']='utf8_general_ci';
+		$this->load->model('tool/collation');
+			$details=$this->model_tool_collation->changeType($vars);
+			$this->session->data['success'] = $this->language->get('text_success');
+
+		//}
+	}
+		
+		public function index() {
 		$this->load->language('module/change_collation_type');
 
 		$this->document->setTitle($this->language->get('heading_title'));
@@ -16,12 +32,7 @@ class ControllerModuleChangeCollationType extends Controller {
 		$this->load->model('tool/collation');
 		
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			foreach ($this->request->post as $key => $value) {
-				$this->request->post[$key] = serialize($value);
-			}
-			$this->model_tool_collation->changeType($this->request->post);
-			$this->session->data['success'] = $this->language->get('text_success');
-						
+		
 			$this->redirect($this->url->link('extension/module', 'token=' . $this->session->data['token'], 'SSL'));
 		}
 

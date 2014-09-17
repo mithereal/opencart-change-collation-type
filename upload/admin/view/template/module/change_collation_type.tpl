@@ -16,9 +16,10 @@
   <div class="content">
     <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" id="form">
       <table class="form">
-        <tr><td><?php echo $entry_newcharset; ?></td><td><input type="text" name="newcharset" value="<?php echo $newcharset; ?>"/></td></tr>
-<tr><td><?php echo $entry_newcollation; ?></td><td><input type="text" name="newcollation" value="<?php echo $newcollation; ?>"/></td></tr>
-       
+        <tr><td><?php echo $entry_newcharset; ?></td><td><input id="newcharset" type="text" name="newcharset" placeholder="utf8" value="<?php echo $newcharset; ?>"/></td></tr>
+<tr><td><?php echo $entry_newcollation; ?></td><td><input type="text" id="newcollation" name="newcollation" placeholder="utf8_general_ci" value="<?php echo $newcollation; ?>"/></td></tr>
+                 <td><a onclick="changecollation()" id="submit" class="button"><span>Change Type</span></a></td>
+
       </table>
      
     </form>
@@ -26,3 +27,11 @@
 </div>
 
 <?php echo $footer; ?>
+<script type="text/javascript"><!--
+
+function changecollation(){
+ var newcharset = document.getElementById('newcharset').value;
+ var newcollation = document.getElementById('newcollation').value;
+
+}
+</script>
