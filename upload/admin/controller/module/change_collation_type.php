@@ -12,16 +12,50 @@ class ControllerModuleChangeCollationType extends Controller {
 	public function process() {
 		//if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 		//	foreach ($this->request->post as $key => $value) {
-			//	$this->request->post[$key] = serialize($value);
+		//		$this->request->post[$key] = serialize($value);
 		//	}
-		//	$this->model_tool_collation->changeType($this->request->post);
+		//	$this->load->model('tool/collation');
+		//$tables['tables']=$this->model_tool_collation->showTables($vars);
+		//$tables['num_tables']=count($tables);
+		//$success=$this->model_tool_collation->changeDBType($vars);
+		//}
+		
 		$vars['new_charset']='utf8';
 		$vars['new_collation']='utf8_general_ci';
 		$this->load->model('tool/collation');
-			$details=$this->model_tool_collation->changeType($vars);
+		$tables['tables']=$this->model_tool_collation->showTables($vars);
+		$tables['num_tables']=count($tables);
+		$success=$this->model_tool_collation->changeDBType($vars);
+		
+			if(isset($success)){
 			$this->session->data['success'] = $this->language->get('text_success');
+			}
+			
+		echo json_encode($tables);
 
+		
+	}
+	public function processCategory() {
+		//if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+		//	foreach ($this->request->post as $key => $value) {
+		//		$this->request->post[$key] = serialize($value);
+		//	}
+		//$this->load->model('tool/collation');
+		//$details=$this->model_tool_collation->changeTable($vars);
+		//$this->session->data['success'] = $this->language->get('text_success');
 		//}
+		
+		echo json_encode($details);
+		$vars['table']='coupon';
+		$vars['new_charset']='utf8';
+		$vars['new_collation']='utf8_general_ci';
+		$this->load->model('tool/collation');
+		$details=$this->model_tool_collation->changeTable($vars);
+		$this->session->data['success'] = $this->language->get('text_success');
+		
+		echo json_encode($details);
+
+		
 	}
 		
 		public function index() {
