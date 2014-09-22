@@ -16,8 +16,8 @@
   <div class="content">
     <form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data" id="form">
       <table class="form">
-        <tr><td><?php echo $entry_newcharset; ?></td><td><input id="newcharset" type="text" name="newcharset" placeholder="utf8" value="utf8"/></td></tr>
-<tr><td><?php echo $entry_newcollation; ?></td><td><input type="text" id="newcollation" name="newcollation" placeholder="utf8_general_ci" value="utf8_general_ci"/></td></tr>
+        <tr><td><?php echo $entry_newcharset; ?></td><td><input id="new_charset" type="text" name="new_charset" placeholder="utf8" value="utf8"/></td></tr>
+<tr><td><?php echo $entry_newcollation; ?></td><td><input type="text" id="new_collation" name="new_collation" placeholder="utf8_general_ci" value="utf8_general_ci"/></td></tr>
                  <td><a id="submit" class="button"><span>Change Type</span></a></td>
 
       </table>
@@ -29,40 +29,53 @@
 
  <script type="text/javascript"><!--
 $('#submit').click(function(){
-var table;
 var num_tables;
+var settings = {"new_charset":$('#new_charset'),"new_collation":$('#new_collation'),"table":''};
+
+var formData = $.map(settings, function(value, index) {
+    return [value];
+});
+
+console.log(formData);
 $.ajax({
 url: 'index.php?route=module/change_collation_type/process&token=<?php echo $token; ?>',
 dataType: 'json',
+type:'POST',
+data : formData,
 success: function(json) {	
-console.log(json);
-table=json['table'] ;
+
+len = json['tables'].length;
 num_tables=json['num_tables'];
 
-for(var i = 0; json['tables'].length; i++)
+tn=0;
+while(parseInt(tn) <= parseInt(num_tables))
 {
-$('#result').append(json['tables'][i]);
-$('#result').append('<br/>');
-}
-}
+settings.table=json['tables'][tn];
+var formData = $.map(settings, function(value, index) {
+    return [value];
 });
-while(table <= num_tables)
-{
+console.log(formData);
 $.ajax({
 url: 'index.php?route=module/change_collation_type/processCategory&token=<?php echo $token; ?>',
 dataType: 'json',
+Type:'POST',
+data : formData,
 success: function(json) {	
 console.log(json);
-table=json['table'] ;
-for(var i = 0; json['tables'].length; i++)
-{
-$('#result').append(json['tables'][i]);
+
+$('#result').append(json['tables'][tn] + " Changed Collation Type to " + settings['table'] );
 $('#result').append('<br/>');
-}
+
 }
 });
+tn = tn + 1;
 }
-});</script>
+
+}
+});
+
+})
+;</script>
 
 <?php echo $footer; ?>
 

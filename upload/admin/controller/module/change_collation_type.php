@@ -10,52 +10,31 @@ class ControllerModuleChangeCollationType extends Controller {
 	private $error = array(); 
 	
 	public function process() {
-		//if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-		//	foreach ($this->request->post as $key => $value) {
-		//		$this->request->post[$key] = serialize($value);
-		//	}
-		//	$this->load->model('tool/collation');
-		//$tables['tables']=$this->model_tool_collation->showTables($vars);
-		//$tables['num_tables']=count($tables);
-		//$success=$this->model_tool_collation->changeDBType($vars);
-		//}
-		
-		$vars['new_charset']='utf8';
-		$vars['new_collation']='utf8_general_ci';
+		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+			
 		$this->load->model('tool/collation');
-		$tables['tables']=$this->model_tool_collation->showTables($vars);
+		$tables['tables']=$this->model_tool_collation->showTables();
 		$tables['num_tables']=count($tables);
-		$success=$this->model_tool_collation->changeDBType($vars);
-		
-			if(isset($success)){
-			$this->session->data['success'] = $this->language->get('text_success');
-			}
+		$success=$this->model_tool_collation->changeDBType($this->request->post);
+		$this->load->model('tool/collation');
+		$tables['tables']=$this->model_tool_collation->showTables($this->request->post);
+		$tables['num_tables']=count($tables['tables']);
+		$success=$this->model_tool_collation->changeDBType($this->request->post);
+		}
 			
 		echo json_encode($tables);
 
 		
 	}
 	public function processCategory() {
-		//if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-		//	foreach ($this->request->post as $key => $value) {
-		//		$this->request->post[$key] = serialize($value);
-		//	}
-		//$this->load->model('tool/collation');
-		//$details=$this->model_tool_collation->changeTable($vars);
-		//$this->session->data['success'] = $this->language->get('text_success');
-		//}
+		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 		
-		echo json_encode($details);
-		$vars['table']='coupon';
-		$vars['new_charset']='utf8';
-		$vars['new_collation']='utf8_general_ci';
 		$this->load->model('tool/collation');
-		$details=$this->model_tool_collation->changeTable($vars);
+		$details=$this->model_tool_collation->changeTable($this->request->post);
 		$this->session->data['success'] = $this->language->get('text_success');
-		
-		echo json_encode($details);
+		}
 
-		
+		echo json_encode($this->request->post);	
 	}
 		
 		public function index() {
@@ -141,6 +120,7 @@ class ControllerModuleChangeCollationType extends Controller {
 		$this->load->model('design/layout');
 		
 		$this->data['layouts'] = $this->model_design_layout->getLayouts();
+		$this->data['token'] = $this->session->data['token'];
 
 		//Choose which template file will be used to display this request.
 		$this->template = 'module/change_collation_type.tpl';

@@ -1,7 +1,7 @@
 <?php 
 class ModelToolCollation extends Model {
 	
-	public function showTables($data) {
+	public function showTables() {
 			$result = $this->db->query("show tables");
 			foreach($result->rows as $row)
 			{
