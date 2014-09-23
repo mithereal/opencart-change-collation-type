@@ -32,16 +32,14 @@ $('#submit').click(function(){
 var num_tables;
 var settings = {"new_charset":$('#new_charset'),"new_collation":$('#new_collation'),"table":''};
 
-var formData = $.map(settings, function(value, index) {
-    return [value];
-});
+var serialized_settings = '&new_charset='+ settings.new_charset + '&new_collation='+ settings.new_collation ;
 
-console.log(formData);
+console.log(serialized_settings);
 $.ajax({
 url: 'index.php?route=module/change_collation_type/process&token=<?php echo $token; ?>',
 dataType: 'json',
 type:'POST',
-data : formData,
+data : serialized_settings,
 success: function(json) {	
 
 len = json['tables'].length;
@@ -51,15 +49,15 @@ tn=0;
 while(parseInt(tn) <= parseInt(num_tables))
 {
 settings.table=json['tables'][tn];
-var formData = $.map(settings, function(value, index) {
-    return [value];
-});
+serialized_settings = null;
+serialized_settings = '&new_charset='+ settings.new_charset + '&new_collation='+ settings.new_collation +'&table='+ settings.table;
+
 console.log(formData);
 $.ajax({
 url: 'index.php?route=module/change_collation_type/processCategory&token=<?php echo $token; ?>',
 dataType: 'json',
 Type:'POST',
-data : formData,
+data : serialized_settings,
 success: function(json) {	
 console.log(json);
 
